@@ -11,7 +11,12 @@ import { hash } from 'bcrypt';
 export class UserService {
     constructor(@InjectRepository(User) private readonly userRepo: Repository<User> ) {}
 
-    async createUser( userObject: RegisterUserDto ): Promise<User>{
+    async login( userObject: LoginUserDto ): Promise<User | {}> {
+    
+        return null;
+    }
+
+    async Register( userObject: RegisterUserDto ): Promise<User>{
         // check if the user already exists
         const userExists = await this.userRepo.findOneBy({ username: userObject.username });
         if (userExists) throw new HttpException('User already exists', 400);

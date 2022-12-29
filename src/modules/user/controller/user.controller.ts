@@ -14,7 +14,7 @@ export class UserController {
         // check if the password is valid length
         if (userObject.password.length < 4) throw new HttpException('Password must be at least 4 characters', 400);
 
-        return await this.userService.createUser(userObject);
+        return await this.userService.Register(userObject);
     }
 
     @Get('find/:id')
