@@ -6,17 +6,6 @@ export class UserController {
 
     constructor(private readonly userService: UserService) {}   
 
-    @Post('create')
-    async create(@Body() userObject: any) {
-        // check if body is empty
-        if (Object.keys(userObject).length === 0) throw new HttpException('Body cannot be empty', 400);
-
-        // check if the password is valid length
-        if (userObject.password.length < 4) throw new HttpException('Password must be at least 4 characters', 400);
-
-        return await this.userService.Register(userObject);
-    }
-
     @Get('find/:id')
     async findOne(@Param('id') id: number) {
         return await this.userService.findUserById(id);
