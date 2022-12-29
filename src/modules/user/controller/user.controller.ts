@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/modules/auth/jwt-auth.guard';
 import { UserService } from '../service/user.service';
 
 @Controller('user')
@@ -6,6 +7,7 @@ export class UserController {
 
     constructor(private readonly userService: UserService) {}   
 
+    @UseGuards(JwtAuthGuard)
     @Get('find/:id')
     async findOne(@Param('id') id: number) {
         return await this.userService.findUserById(id);
