@@ -5,12 +5,17 @@ import { User } from 'src/entities/user.entity';
 import { LoginUserDto } from 'src/modules/user/dto/login-user.dto';
 import { RegisterUserDto } from 'src/modules/user/dto/register-user.dto';
 import { Repository } from 'typeorm';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-    constructor(@InjectRepository(User) private readonly userRepo: Repository<User> ) {}
+    constructor(
+            @InjectRepository(User) private readonly userRepo: Repository<User>,
+            private jetService: JwtService
 
-    async login( userObject: LoginUserDto ): Promise<User | {}> {
+    ) {}
+
+    async login( userObject: LoginUserDto ): Promise<{}> {
         
         const { email, password } = userObject;
 
@@ -25,8 +30,17 @@ export class AuthService {
         const isPasswordCorrect = await compare(password, findUser.password);
         if (!isPasswordCorrect) throw new HttpException('Credential is incorrect', 400);
 
-        // return the user object
-        return findUser;
+        // create a token
+        const payload = { username: findUser.username, sub: findUser.id };
+        const accessToken = this.jetService.sign(payload);
+        
+        // delete the password from the user object
+        delete findUser.password;
+
+        return {
+            token: accessToken,
+            user: findUser
+        };
     }
 
     async register( userObject: RegisterUserDto ): Promise<User>{
@@ -45,7 +59,7 @@ export class AuthService {
 
         // create a new user object
         const user = this.userRepo.create(userObject);
-
+        
         // save the user object to the database
         return await this.userRepo.save(user) as User;
     }
