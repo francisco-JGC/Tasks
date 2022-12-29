@@ -16,11 +16,8 @@ import { RoleModule } from './modules/role/role.module';
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
-
     UserModule,
-
     AuthModule,
-
     RoleModule,
     ],
   controllers: [],
