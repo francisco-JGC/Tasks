@@ -5,7 +5,7 @@ import { User } from 'src/entities/user.entity';
 import { AuthService } from './service/auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from 'src/modules/auth/jwt.constants';
-import { JwtAuthGuard } from './jwt-auth.guard';
+import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { Role } from 'src/entities/role.entity';
 import { RoleService } from '../role/service/role.service';
 
