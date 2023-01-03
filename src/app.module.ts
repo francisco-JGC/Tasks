@@ -6,6 +6,7 @@ import { RoleModule } from './modules/role/role.module';
 import { RoleService } from './modules/role/service/role.service';
 import { Role } from './entities/role.entity';
 import { User } from './entities/user.entity';
+import { TaskModule } from './modules/task/task.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { User } from './entities/user.entity';
     UserModule,
     AuthModule,
     RoleModule,
+    TaskModule,
     ],
   controllers: [],
   providers: [RoleService],
