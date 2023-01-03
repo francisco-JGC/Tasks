@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, JoinColumn } from 'typeorm';
 import { Role } from './role.entity';
-
+import { Task } from './task.entity';
 @Entity()
 export class User {
     @PrimaryGeneratedColumn()
@@ -23,4 +23,7 @@ export class User {
 
     @OneToMany(type => Role, role => role.user)
     roles: Role[];
+
+    @OneToMany(type => Task, task => task.user)
+    tasks: Task[];
 }
