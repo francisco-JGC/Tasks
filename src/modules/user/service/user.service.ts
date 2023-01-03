@@ -9,6 +9,10 @@ import { HttpException } from '@nestjs/common/exceptions';
 export class UserService {
     constructor(@InjectRepository(User) private readonly userRepo: Repository<User> ) {}
 
+    async findAllUsers(): Promise<User[]> {
+        return await this.userRepo.find();
+    }
+
     async findUserById( id: number ): Promise<User | {}> {
         // findOneBy is a custom method
         const user = await this.userRepo.findOneBy({ id }); 
