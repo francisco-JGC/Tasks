@@ -49,13 +49,36 @@ export class RoleService {
     }
 
     async removeRoleFromUser(userId: number, roleId: number): Promise<User> {
-        const user = await this.userRepo.findOneBy({ id: userId });
+        const user = await this.userRepo.find({
+            where: { id: userId },
+            relations: ['roles']
+        });
         const role = await this.roleRepo.findOneBy({ id: roleId });
 
         if (!user) throw new HttpException('User does not exist', 400);
         if (!role) throw new HttpException('Role does not exist', 400);
 
-        user.roles = user.roles.filter(r => r.id !== role.id);
-        return await this.userRepo.save(user);
+        const userHasRole = user[0].roles.find(r => r.id === role.id);
+        if (!userHasRole) throw new HttpException('User does not have the role', 400);
+
+        user[0].roles = user[0].roles.filter(r => r.id !== role.id);
+        return await this.userRepo.save(user[0]);
+    }
+
+    async assignRoleToUser(userId: number, roleId: number): Promise<User> {
+        const user = await this.userRepo.find({
+            where: { id: userId },
+            relations: ['roles']
+        })
+        const role = await this.roleRepo.findOneBy({ id: roleId });
+
+        if (!user) throw new HttpException('User does not exist', 400);
+        if (!role) throw new HttpException('Role does not exist', 400);
+
+        const userHasRole = user[0].roles.find(r => r.id === role.id);
+        if (userHasRole) throw new HttpException('User already has the role', 400);
+
+        user[0].roles.push(role);
+        return await this.userRepo.save(user[0]);
     }
 }
